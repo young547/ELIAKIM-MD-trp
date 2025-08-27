@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phone Number Location Lookup</title>
+</head>
+<body>
+  <h3>Enter Phone Number with country code:</h3>
+  <input type="text" id="phoneInput" placeholder="+254712345678" />
+  <button onclick="lookup()">Lookup Location</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function lookup() {
+      const phone = document.getElementById('phoneInput').value;
+      if (!phone) {
+        alert('Please enter a phone number!');
+        return;
+      }
+
+      const res = await fetch('/lookup', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ phone_number: phone })
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('result').textContent = 'Error: ' + data.error;
+      } else {
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+      }
+    }
+  </script>
+</body>
+</html>
